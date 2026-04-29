@@ -34,8 +34,8 @@
                         <span class="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-green-300 bg-clip-text text-transparent">AR</span>
                     </div>
                     <div class="hidden md:flex items-center space-x-8">
-                        <a v-for="link in navLinks" :key="link.id" :href="'#' + link.id" @click.prevent="scrollToSection(link.id)" class="text-gray-300 hover:text-emerald-400 transition-colors duration-300 text-sm uppercase tracking-wider">{{ texts.nav[link.key] }}</a>
-                        <button @click="toggleLang" class="text-xl focus:outline-none hover:scale-110 transition-transform" :title="lang === 'en' ? 'Switch to Spanish' : 'Cambiar a Inglés'">
+                        <a v-for="link in navLinks" :key="link.id" :href="'#' + link.id" @click.prevent="scrollToSection(link.id)" class="text-gray-300 hover:text-emerald-400 transition-colors duration-300 text-sm uppercase tracking-wider">{{ getText(link.key) }}</a>
+                        <button @click="toggleLang" class="text-xl focus:outline-none hover:scale-110 transition-transform" :title="lang === 'en' ? 'Cambiar a Español' : 'Switch to English'">
                             {{ lang === 'en' ? '🇪🇸' : '🇺🇸' }}
                         </button>
                     </div>
@@ -52,7 +52,7 @@
             <!-- Mobile menu -->
             <div :class="{'block': menuOpen, 'hidden': !menuOpen}" class="md:hidden bg-gray-950/95 backdrop-blur-md border-b border-emerald-900/50">
                 <div class="px-4 pt-2 pb-4 space-y-3">
-                    <a v-for="link in navLinks" :key="link.id" :href="'#' + link.id" @click.prevent="scrollToSection(link.id); menuOpen = false" class="block text-gray-300 hover:text-emerald-400 transition-colors duration-300 py-2 text-lg">{{ texts.nav[link.key] }}</a>
+                    <a v-for="link in navLinks" :key="link.id" :href="'#' + link.id" @click.prevent="scrollToSection(link.id); menuOpen = false" class="block text-gray-300 hover:text-emerald-400 transition-colors duration-300 py-2 text-lg">{{ getText(link.key) }}</a>
                 </div>
             </div>
         </nav>
@@ -65,9 +65,9 @@
             <div class="relative z-10 text-center px-4" data-aos="fade-in" data-aos-duration="1000">
                 <div class="w-40 h-40 mx-auto rounded-full bg-gradient-to-br from-emerald-600 to-green-500 flex items-center justify-center text-5xl font-bold text-white shadow-2xl shadow-emerald-500/30 mb-8">AR</div>
                 <h1 class="text-5xl md:text-7xl font-extrabold mb-4 bg-gradient-to-r from-emerald-300 via-green-400 to-emerald-200 bg-clip-text text-transparent">Alan Ruiz</h1>
-                <p class="text-xl md:text-2xl text-emerald-300/90 mb-10 font-light">{{ texts.hero.title }}</p>
+                <p class="text-xl md:text-2xl text-emerald-300/90 mb-10 font-light">{{ getText('hero_title') }}</p>
                 <a href="#contact" @click.prevent="scrollToSection('contact')" class="inline-flex items-center bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-emerald-500/40">
-                    {{ texts.hero.cta }} <i class="fas fa-arrow-down ml-2"></i>
+                    {{ getText('hero_cta') }} <i class="fas fa-arrow-down ml-2"></i>
                 </a>
             </div>
         </section>
@@ -75,9 +75,9 @@
         <!-- About Me -->
         <section id="about" class="py-24 bg-gray-900/50">
             <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="text-4xl font-bold text-center mb-16 text-white" data-aos="fade-up">{{ texts.about.heading }}</h2>
+                <h2 class="text-4xl font-bold text-center mb-16 text-white" data-aos="fade-up">{{ getText('about_heading') }}</h2>
                 <div class="bg-gray-900/80 backdrop-blur-sm border border-emerald-800/40 rounded-2xl p-8 md:p-12 shadow-2xl" data-aos="fade-up" data-aos-delay="200">
-                    <p class="text-lg text-gray-200 leading-relaxed">{{ texts.about.content }}</p>
+                    <p class="text-lg text-gray-200 leading-relaxed">{{ getText('about_content') }}</p>
                 </div>
             </div>
         </section>
@@ -85,14 +85,14 @@
         <!-- Skills -->
         <section id="skills" class="py-24 bg-gray-950">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="text-4xl font-bold text-center mb-16 text-white" data-aos="fade-up">{{ texts.skills.heading }}</h2>
+                <h2 class="text-4xl font-bold text-center mb-16 text-white" data-aos="fade-up">{{ getText('skills_heading') }}</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div v-for="skill in skills" :key="skill.key" class="bg-gray-900/80 border border-emerald-800/30 rounded-2xl p-6 shadow-lg hover:shadow-emerald-500/20 transition-all duration-300" data-aos="fade-up" :data-aos-delay="skill.delay">
                         <div class="flex items-center space-x-4 mb-4">
                             <div class="w-12 h-12 bg-gradient-to-br from-emerald-700 to-green-600 rounded-xl flex items-center justify-center text-white text-xl"><i :class="skill.icon"></i></div>
                             <div>
-                                <h3 class="text-xl font-semibold text-white">{{ skill.name }}</h3>
-                                <span class="text-sm text-emerald-400">{{ skill.levelText }}</span>
+                                <h3 class="text-xl font-semibold text-white">{{ getText(skill.key + '_name') }}</h3>
+                                <span class="text-sm text-emerald-400">{{ getText(skill.key + '_level') }}</span>
                             </div>
                         </div>
                         <div class="w-full bg-gray-800 rounded-full h-2.5 overflow-hidden">
@@ -106,12 +106,12 @@
         <!-- Hobbies & Interests -->
         <section id="hobbies" class="py-24 bg-gray-900/50">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="text-4xl font-bold text-center mb-16 text-white" data-aos="fade-up">{{ texts.hobbies.heading }}</h2>
+                <h2 class="text-4xl font-bold text-center mb-16 text-white" data-aos="fade-up">{{ getText('hobbies_heading') }}</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div v-for="hobby in hobbies" :key="hobby.key" class="bg-gray-900/80 border border-emerald-800/30 rounded-2xl p-6 text-center hover:border-emerald-500/50 transition-all duration-300 group" data-aos="fade-up" :data-aos-delay="hobby.delay">
                         <div class="w-16 h-16 mx-auto bg-gradient-to-br from-emerald-700 to-green-600 rounded-2xl flex items-center justify-center text-2xl text-white mb-4 group-hover:scale-110 transition-transform duration-300"><i :class="hobby.icon"></i></div>
-                        <h3 class="text-lg font-semibold text-white mb-2">{{ hobby.name }}</h3>
-                        <p class="text-gray-400 text-sm">{{ hobby.desc }}</p>
+                        <h3 class="text-lg font-semibold text-white mb-2">{{ getText(hobby.key + '_name') }}</h3>
+                        <p class="text-gray-400 text-sm">{{ getText(hobby.key + '_desc') }}</p>
                     </div>
                 </div>
             </div>
@@ -120,7 +120,7 @@
         <!-- Contact -->
         <section id="contact" class="py-24 bg-gray-950">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h2 class="text-4xl font-bold mb-16 text-white" data-aos="fade-up">{{ texts.contact.heading }}</h2>
+                <h2 class="text-4xl font-bold mb-16 text-white" data-aos="fade-up">{{ getText('contact_heading') }}</h2>
                 <div class="bg-gray-900/80 border border-emerald-800/40 rounded-2xl p-10 shadow-2xl" data-aos="fade-up" data-aos-delay="200">
                     <div class="inline-flex items-center space-x-4 bg-gray-950/50 rounded-full px-6 py-3 mb-6 border border-emerald-800/30">
                         <i class="fas fa-envelope text-emerald-400 text-2xl"></i>
@@ -128,13 +128,13 @@
                     </div>
                     <div class="flex flex-wrap justify-center gap-4">
                         <button @click="copyEmail" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 flex items-center shadow-lg hover:shadow-emerald-500/40">
-                            <i class="fas fa-copy mr-2"></i> {{ texts.contact.copyBtn }}
+                            <i class="fas fa-copy mr-2"></i> {{ getText('contact_copy') }}
                         </button>
                         <a :href="pinterestUrl" target="_blank" rel="noopener noreferrer" class="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 flex items-center shadow-lg border border-emerald-800/40">
                             <i class="fab fa-pinterest mr-2"></i> Pinterest
                         </a>
                     </div>
-                    <p v-if="copied" class="text-emerald-400 mt-4 animate-pulse">{{ texts.contact.copied }}</p>
+                    <p v-if="copied" class="text-emerald-400 mt-4 animate-pulse">{{ getText('contact_copied') }}</p>
                 </div>
             </div>
         </section>
@@ -142,7 +142,7 @@
         <!-- Footer -->
         <footer class="border-t border-emerald-900/40 py-8 bg-gray-950">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500 text-sm">
-                <p>&copy; {{ currentYear }} Alan Ruiz. {{ texts.footer }}</p>
+                <p>&copy; {{ currentYear }} Alan Ruiz. {{ getText('footer_text') }}</p>
             </div>
         </footer>
     </div>
@@ -168,91 +168,73 @@
                         { id: 'hobbies', key: 'hobbies' },
                         { id: 'contact', key: 'contact' }
                     ],
-                    texts: {
-                        nav: {
-                            home: { en: 'Home', es: 'Inicio' },
-                            about: { en: 'About', es: 'Sobre mí' },
-                            skills: { en: 'Skills', es: 'Habilidades' },
-                            hobbies: { en: 'Hobbies', es: 'Pasatiempos' },
-                            contact: { en: 'Contact', es: 'Contacto' }
+                    translations: {
+                        home: { en: 'Home', es: 'Inicio' },
+                        about: { en: 'About', es: 'Sobre mí' },
+                        skills: { en: 'Skills', es: 'Habilidades' },
+                        hobbies: { en: 'Hobbies', es: 'Pasatiempos' },
+                        contact: { en: 'Contact', es: 'Contacto' },
+                        hero_title: { en: 'Python & Manga Enthusiast', es: 'Entusiasta de Python y el Manga' },
+                        hero_cta: { en: 'Get in touch', es: 'Contactar' },
+                        about_heading: { en: 'About Me', es: 'Sobre Mí' },
+                        about_content: {
+                            en: "I'm Alan, a self‑taught learner with a strong command of English and a growing foundation in Python and GitHub. I believe in discipline as the engine of progress: I go to the gym regularly and maintain a lifestyle built on good habits. In my free time, I dive into the captivating worlds of manga and manhwa, always searching for stories that inspire and challenge my perspective. I'm passionate about continuous improvement, whether in code, health, or mindset.",
+                            es: "Soy Alan, un aprendiz autodidacta con un sólido dominio del inglés y una base creciente en Python y GitHub. Creo en la disciplina como motor del progreso: voy al gimnasio con regularidad y mantengo un estilo de vida basado en buenos hábitos. En mi tiempo libre, me sumerjo en los cautivadores mundos del manga y el manhwa, siempre en busca de historias que inspiren y desafíen mi perspectiva. Me apasiona la mejora continua, ya sea en el código, la salud o la mentalidad."
                         },
-                        hero: {
-                            title: { en: 'Python & Manga Enthusiast', es: 'Entusiasta de Python y el Manga' },
-                            cta: { en: 'Get in touch', es: 'Contactar' }
-                        },
-                        about: {
-                            heading: { en: 'About Me', es: 'Sobre Mí' },
-                            content: {
-                                en: "I'm Alan, a self‑taught learner with a strong command of English and a growing foundation in Python and GitHub. I believe in discipline as the engine of progress: I go to the gym regularly and maintain a lifestyle built on good habits. In my free time, I dive into the captivating worlds of manga and manhwa, always searching for stories that inspire and challenge my perspective. I'm passionate about continuous improvement, whether in code, health, or mindset.",
-                                es: "Soy Alan, un aprendiz autodidacta con un sólido dominio del inglés y una base creciente en Python y GitHub. Creo en la disciplina como motor del progreso: voy al gimnasio con regularidad y mantengo un estilo de vida basado en buenos hábitos. En mi tiempo libre, me sumerjo en los cautivadores mundos del manga y el manhwa, siempre en busca de historias que inspiren y desafíen mi perspectiva. Me apasiona la mejora continua, ya sea en el código, la salud o la mentalidad."
-                            }
-                        },
-                        skills: {
-                            heading: { en: 'Skills & Strengths', es: 'Habilidades y Fortalezas' },
-                            python: { en: 'Python (Basic)', es: 'Python (Básico)' },
-                            github: { en: 'GitHub (Basic)', es: 'GitHub (Básico)' },
-                            gym: { en: 'Gym & Discipline', es: 'Gimnasio y Disciplina' },
-                            english: { en: 'English (Advanced)', es: 'Inglés (Avanzado)' }
-                        },
-                        hobbies: {
-                            heading: { en: 'Hobbies & Interests', es: 'Pasatiempos e Intereses' },
-                            gym: { 
-                                name: { en: 'Gym', es: 'Gimnasio' },
-                                desc: { en: 'Weightlifting and functional training keep me focused and energized.', es: 'El levantamiento de pesas y el entrenamiento funcional me mantienen centrado y con energía.' }
-                            },
-                            manga: {
-                                name: { en: 'Manga & Manhwa', es: 'Manga y Manhwa' },
-                                desc: { en: 'I love exploring complex narratives and unique art styles from Japan and Korea.', es: 'Me encanta explorar narrativas complejas y estilos de arte únicos de Japón y Corea.' }
-                            },
-                            healthy: {
-                                name: { en: 'Healthy Lifestyle', es: 'Estilo de vida saludable' },
-                                desc: { en: 'Mindful eating, quality sleep, and consistency are my non‑negotiables.', es: 'Alimentación consciente, sueño de calidad y constancia son mis prioridades innegociables.' }
-                            },
-                            learning: {
-                                name: { en: 'Continuous Learning', es: 'Aprendizaje continuo' },
-                                desc: { en: 'Always picking up new tech skills or diving into personal development.', es: 'Siempre adquiriendo nuevas habilidades tecnológicas o profundizando en desarrollo personal.' }
-                            }
-                        },
-                        contact: {
-                            heading: { en: 'Get In Touch', es: 'Contacto' },
-                            copyBtn: { en: 'Copy Email', es: 'Copiar Email' },
-                            copied: { en: 'Copied!', es: '¡Copiado!' }
-                        },
-                        footer: { en: 'All rights reserved.', es: 'Todos los derechos reservados.' }
+                        skills_heading: { en: 'Skills & Strengths', es: 'Habilidades y Fortalezas' },
+                        python_name: { en: 'Python', es: 'Python' },
+                        python_level: { en: 'Basic', es: 'Básico' },
+                        github_name: { en: 'GitHub', es: 'GitHub' },
+                        github_level: { en: 'Basic', es: 'Básico' },
+                        gym_name: { en: 'Gym & Discipline', es: 'Gimnasio y Disciplina' },
+                        gym_level: { en: 'Advanced', es: 'Avanzado' },
+                        english_name: { en: 'English', es: 'Inglés' },
+                        english_level: { en: 'Advanced', es: 'Avanzado' },
+                        hobbies_heading: { en: 'Hobbies & Interests', es: 'Pasatiempos e Intereses' },
+                        gym_hobby_name: { en: 'Gym', es: 'Gimnasio' },
+                        gym_hobby_desc: { en: 'Weightlifting and functional training keep me focused and energized.', es: 'El levantamiento de pesas y el entrenamiento funcional me mantienen centrado y con energía.' },
+                        manga_name: { en: 'Manga & Manhwa', es: 'Manga y Manhwa' },
+                        manga_desc: { en: 'I love exploring complex narratives and unique art styles from Japan and Korea.', es: 'Me encanta explorar narrativas complejas y estilos de arte únicos de Japón y Corea.' },
+                        healthy_name: { en: 'Healthy Lifestyle', es: 'Estilo de vida saludable' },
+                        healthy_desc: { en: 'Mindful eating, quality sleep, and consistency are my non‑negotiables.', es: 'Alimentación consciente, sueño de calidad y constancia son mis prioridades innegociables.' },
+                        learning_name: { en: 'Continuous Learning', es: 'Aprendizaje continuo' },
+                        learning_desc: { en: 'Always picking up new tech skills or diving into personal development.', es: 'Siempre adquiriendo nuevas habilidades tecnológicas o profundizando en desarrollo personal.' },
+                        contact_heading: { en: 'Get In Touch', es: 'Contacto' },
+                        contact_copy: { en: 'Copy Email', es: 'Copiar Email' },
+                        contact_copied: { en: 'Copied!', es: '¡Copiado!' },
+                        footer_text: { en: 'All rights reserved.', es: 'Todos los derechos reservados.' }
                     },
                     skills: [
-                        { key: 'python', icon: 'fas fa-code', value: 40, name: '', levelText: '', delay: 0 },
-                        { key: 'github', icon: 'fab fa-github', value: 50, name: '', levelText: '', delay: 100 },
-                        { key: 'gym', icon: 'fas fa-dumbbell', value: 80, name: '', levelText: '', delay: 200 },
-                        { key: 'english', icon: 'fas fa-language', value: 90, name: '', levelText: '', delay: 300 }
+                        { key: 'python', icon: 'fas fa-code', value: 40, delay: 0 },
+                        { key: 'github', icon: 'fab fa-github', value: 50, delay: 100 },
+                        { key: 'gym', icon: 'fas fa-dumbbell', value: 80, delay: 200 },
+                        { key: 'english', icon: 'fas fa-language', value: 90, delay: 300 }
                     ],
                     hobbies: [
-                        { key: 'gym', icon: 'fas fa-dumbbell', name: '', desc: '', delay: 0 },
-                        { key: 'manga', icon: 'fas fa-book-open', name: '', desc: '', delay: 100 },
-                        { key: 'healthy', icon: 'fas fa-heart-pulse', name: '', desc: '', delay: 200 },
-                        { key: 'learning', icon: 'fas fa-laptop-code', name: '', desc: '', delay: 300 }
+                        { key: 'gym_hobby', icon: 'fas fa-dumbbell', delay: 0 },
+                        { key: 'manga', icon: 'fas fa-book-open', delay: 100 },
+                        { key: 'healthy', icon: 'fas fa-heart-pulse', delay: 200 },
+                        { key: 'learning', icon: 'fas fa-laptop-code', delay: 300 }
                     ]
                 }
             },
             mounted() {
                 AOS.init({ once: true, duration: 800 });
-                this.updateTexts();
                 window.addEventListener('scroll', this.handleScroll);
-                this.handleScroll(); // check initial visibility
+                this.handleScroll();
             },
             beforeUnmount() {
                 window.removeEventListener('scroll', this.handleScroll);
             },
             methods: {
+                getText(key) {
+                    if (this.translations[key]) {
+                        return this.translations[key][this.lang];
+                    }
+                    return key;
+                },
                 toggleLang() {
                     this.lang = this.lang === 'en' ? 'es' : 'en';
-                    this.updateTexts();
-                },
-                updateTexts() {
-                    // Update texts reactively
-                    this.navLinks.forEach(link => {
-                        // Just for binding, already reactive because lang change triggers re-render
-                    });
                 },
                 scrollToSection(id) {
                     const section = document.getElementById(id);
@@ -269,12 +251,11 @@
                     });
                 },
                 handleScroll() {
-                    if (this.animateBars) return; // already animated
+                    if (this.animateBars) return;
                     const skillsSection = document.getElementById('skills');
                     if (!skillsSection) return;
                     const rect = skillsSection.getBoundingClientRect();
                     const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-                    // Trigger when top of skills section is within viewport (with some offset)
                     if (rect.top < windowHeight - 100 && rect.bottom > 0) {
                         this.animateBars = true;
                     }
