@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alan Ruiz | Portfolio</title>
+    <title>Gestión de Excepciones | Manual Técnico Python</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -11,138 +11,250 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: {
-                        emerald: {
-                            950: '#022c22',
-                        },
-                    },
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Fira Code', 'Courier New', 'monospace'],
                     },
                 }
             }
         }
     </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+        .typing-cursor::after {
+            content: '▋';
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+        .line-numbers {
+            counter-reset: line;
+        }
+        .line-numbers code::before {
+            counter-increment: line;
+            content: counter(line);
+            display: inline-block;
+            width: 2rem;
+            margin-right: 1rem;
+            color: #6b7280;
+            text-align: right;
+        }
+    </style>
 </head>
-<body class="bg-gray-950 text-gray-100 font-sans antialiased">
+<body class="bg-gray-950 text-green-400 font-mono antialiased">
     <div id="app">
-        <!-- Navbar -->
-        <nav class="fixed w-full z-50 bg-gray-950/90 backdrop-blur-md border-b border-emerald-900/50 shadow-lg">
+        <!-- Navbar Terminal Style -->
+        <nav class="fixed w-full z-50 bg-gray-950/95 border-b border-green-800/50 shadow-lg backdrop-blur-md">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center justify-between h-16">
-                    <div class="flex items-center space-x-3">
-                        <span class="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-green-300 bg-clip-text text-transparent">AR</span>
+                <div class="flex items-center justify-between h-14">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-green-500">~</span>
+                        <span class="text-gray-400">/manual-python</span>
+                        <span class="text-green-500">$</span>
+                        <span class="typing-cursor text-green-300 text-sm">gestion_excepciones</span>
                     </div>
-                    <div class="hidden md:flex items-center space-x-8">
-                        <a v-for="link in navLinks" :key="link.id" :href="'#' + link.id" @click.prevent="scrollToSection(link.id)" class="text-gray-300 hover:text-emerald-400 transition-colors duration-300 text-sm uppercase tracking-wider">{{ getText(link.key) }}</a>
-                        <button @click="toggleLang" class="text-xl focus:outline-none hover:scale-110 transition-transform" :title="lang === 'en' ? 'Cambiar a Español' : 'Switch to English'">
-                            {{ lang === 'en' ? '🇪🇸' : '🇺🇸' }}
-                        </button>
+                    <div class="hidden md:flex items-center space-x-6 text-sm">
+                        <a v-for="link in navLinks" :key="link.id" :href="'#' + link.id" @click.prevent="scrollToSection(link.id)" class="text-green-500 hover:text-green-300 transition-colors duration-200 flex items-center space-x-1">
+                            <i :class="link.icon"></i>
+                            <span>{{ link.label }}</span>
+                        </a>
                     </div>
-                    <div class="md:hidden flex items-center space-x-4">
-                        <button @click="toggleLang" class="text-xl focus:outline-none hover:scale-110 transition-transform">
-                            {{ lang === 'en' ? '🇪🇸' : '🇺🇸' }}
-                        </button>
-                        <button @click="menuOpen = !menuOpen" class="text-gray-300 hover:text-emerald-400 focus:outline-none">
-                            <i class="fas fa-bars text-2xl"></i>
-                        </button>
-                    </div>
+                    <button @click="menuOpen = !menuOpen" class="md:hidden text-green-500 hover:text-green-300">
+                        <i class="fas fa-terminal text-xl"></i>
+                    </button>
                 </div>
-            </div>
-            <!-- Mobile menu -->
-            <div :class="{'block': menuOpen, 'hidden': !menuOpen}" class="md:hidden bg-gray-950/95 backdrop-blur-md border-b border-emerald-900/50">
-                <div class="px-4 pt-2 pb-4 space-y-3">
-                    <a v-for="link in navLinks" :key="link.id" :href="'#' + link.id" @click.prevent="scrollToSection(link.id); menuOpen = false" class="block text-gray-300 hover:text-emerald-400 transition-colors duration-300 py-2 text-lg">{{ getText(link.key) }}</a>
+                <div :class="{'block': menuOpen, 'hidden': !menuOpen}" class="md:hidden bg-gray-950/95 border-t border-green-900/50 mt-2 py-2">
+                    <a v-for="link in navLinks" :key="link.id" :href="'#' + link.id" @click.prevent="scrollToSection(link.id); menuOpen = false" class="block text-green-500 hover:text-green-300 py-2 px-4 text-sm">
+                        <i :class="link.icon"></i> {{ link.label }}
+                    </a>
                 </div>
             </div>
         </nav>
 
-        <!-- Hero Section -->
-        <section id="home" class="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-950 via-slate-900 to-emerald-950 overflow-hidden">
-            <div class="absolute inset-0 opacity-10">
-                <div class="absolute inset-0 bg-gradient-to-t from-emerald-800/20 to-transparent"></div>
-            </div>
-            <div class="relative z-10 text-center px-4" data-aos="fade-in" data-aos-duration="1000">
-                <div class="w-40 h-40 mx-auto rounded-full bg-gradient-to-br from-emerald-600 to-green-500 flex items-center justify-center text-5xl font-bold text-white shadow-2xl shadow-emerald-500/30 mb-8">AR</div>
-                <h1 class="text-5xl md:text-7xl font-extrabold mb-4 bg-gradient-to-r from-emerald-300 via-green-400 to-emerald-200 bg-clip-text text-transparent">Alan Ruiz</h1>
-                <p class="text-xl md:text-2xl text-emerald-300/90 mb-10 font-light">{{ getText('hero_title') }}</p>
-                <a href="#contact" @click.prevent="scrollToSection('contact')" class="inline-flex items-center bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-emerald-500/40">
-                    {{ getText('hero_cta') }} <i class="fas fa-arrow-down ml-2"></i>
-                </a>
-            </div>
-        </section>
-
-        <!-- About Me -->
-        <section id="about" class="py-24 bg-gray-900/50">
-            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="text-4xl font-bold text-center mb-16 text-white" data-aos="fade-up">{{ getText('about_heading') }}</h2>
-                <div class="bg-gray-900/80 backdrop-blur-sm border border-emerald-800/40 rounded-2xl p-8 md:p-12 shadow-2xl" data-aos="fade-up" data-aos-delay="200">
-                    <p class="text-lg text-gray-200 leading-relaxed">{{ getText('about_content') }}</p>
+        <!-- Hero / Terminal Intro -->
+        <section id="inicio" class="min-h-screen flex items-center justify-center pt-14 bg-gradient-to-b from-gray-950 to-gray-900">
+            <div class="text-center px-4 max-w-4xl" data-aos="fade-in" data-aos-duration="1000">
+                <div class="inline-flex items-center space-x-2 text-green-600 mb-4">
+                    <i class="fas fa-shield-haltered text-4xl"></i>
+                </div>
+                <h1 class="text-4xl md:text-6xl font-bold mb-6">
+                    <span class="text-green-500">[</span>
+                    <span class="text-green-300">Gestión de Excepciones</span>
+                    <span class="text-green-500">]</span>
+                </h1>
+                <p class="text-lg text-green-400/80 mb-8 font-mono typing-cursor">
+                    <!-- COMPLETAR: Descripción breve del tema (1-2 líneas) -->
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="#definicion" @click.prevent="scrollToSection('definicion')" class="border border-green-700 text-green-400 hover:bg-green-900/30 px-6 py-3 rounded font-mono text-sm transition-all duration-300">
+                        <i class="fas fa-book mr-2"></i>Manual
+                    </a>
+                    <a href="#codigo-interactivo" @click.prevent="scrollToSection('codigo-interactivo')" class="border border-green-700 text-green-400 hover:bg-green-900/30 px-6 py-3 rounded font-mono text-sm transition-all duration-300">
+                        <i class="fas fa-code mr-2"></i>Live Code
+                    </a>
                 </div>
             </div>
         </section>
 
-        <!-- Skills -->
-        <section id="skills" class="py-24 bg-gray-950">
-            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="text-4xl font-bold text-center mb-16 text-white" data-aos="fade-up">{{ getText('skills_heading') }}</h2>
+        <!-- 1. Definición del Concepto -->
+        <section id="definicion" class="py-20 bg-gray-900/40">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center space-x-3 mb-10" data-aos="fade-right">
+                    <span class="text-green-600 text-2xl">#</span>
+                    <h2 class="text-3xl font-bold text-green-400">
+                        <!-- COMPLETAR: Título de la sección Definición -->
+                    </h2>
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div v-for="skill in skills" :key="skill.key" class="bg-gray-900/80 border border-emerald-800/30 rounded-2xl p-6 shadow-lg hover:shadow-emerald-500/20 transition-all duration-300" data-aos="fade-up" :data-aos-delay="skill.delay">
-                        <div class="flex items-center space-x-4 mb-4">
-                            <div class="w-12 h-12 bg-gradient-to-br from-emerald-700 to-green-600 rounded-xl flex items-center justify-center text-white text-xl"><i :class="skill.icon"></i></div>
-                            <div>
-                                <h3 class="text-xl font-semibold text-white">{{ getText(skill.key + '_name') }}</h3>
-                                <span class="text-sm text-emerald-400">{{ getText(skill.key + '_level') }}</span>
+                    <div class="bg-gray-950 border border-green-900/40 rounded-lg p-6" data-aos="fade-up" data-aos-delay="100">
+                        <div class="flex items-center space-x-2 mb-4 text-xs text-gray-500">
+                            <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                            <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+                            <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                            <span class="ml-2">definicion.py</span>
+                        </div>
+                        <!-- COMPLETAR: Definición técnica del concepto -->
+                        <p class="text-green-300 leading-relaxed"></p>
+                    </div>
+                    <div class="bg-gray-950 border border-green-900/40 rounded-lg p-6" data-aos="fade-up" data-aos-delay="200">
+                        <div class="flex items-center space-x-2 mb-4 text-xs text-gray-500">
+                            <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                            <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+                            <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                            <span class="ml-2">por_que_importa.md</span>
+                        </div>
+                        <!-- COMPLETAR: Explicación del "por qué" técnico -->
+                        <p class="text-green-300 leading-relaxed"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Antes vs. Después -->
+        <section id="antes-despues" class="py-20 bg-gray-950">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center space-x-3 mb-10" data-aos="fade-right">
+                    <span class="text-green-600 text-2xl">##</span>
+                    <h2 class="text-3xl font-bold text-green-400">Antes vs. Después</h2>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Antes (Código Ineficiente) -->
+                    <div class="bg-red-950/20 border border-red-800/40 rounded-lg overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+                        <div class="bg-red-900/40 px-4 py-2 flex items-center space-x-2">
+                            <i class="fas fa-times-circle text-red-400"></i>
+                            <span class="text-red-300 text-sm font-mono">Código Ineficiente (Sin manejo de errores)</span>
+                        </div>
+                        <div class="p-4">
+                            <pre class="line-numbers text-sm text-red-300 overflow-x-auto"><code><!-- COMPLETAR: Código SIN manejo de excepciones (ejemplo que crashea) --></code></pre>
+                        </div>
+                    </div>
+                    <!-- Después (Código Optimizado) -->
+                    <div class="bg-green-950/20 border border-green-800/40 rounded-lg overflow-hidden" data-aos="fade-up" data-aos-delay="200">
+                        <div class="bg-green-900/40 px-4 py-2 flex items-center space-x-2">
+                            <i class="fas fa-check-circle text-green-400"></i>
+                            <span class="text-green-300 text-sm font-mono">Código Optimizado (Con try/except/finally)</span>
+                        </div>
+                        <div class="p-4">
+                            <pre class="line-numbers text-sm text-green-300 overflow-x-auto"><code><!-- COMPLETAR: Código CON manejo de excepciones (versión robusta) --></code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Diagrama de Flujo / Infografía -->
+        <section id="diagrama" class="py-20 bg-gray-900/40">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center space-x-3 mb-10" data-aos="fade-right">
+                    <span class="text-green-600 text-2xl">###</span>
+                    <h2 class="text-3xl font-bold text-green-400">Diagrama de Flujo Técnico</h2>
+                </div>
+                <div class="bg-gray-950 border border-green-900/40 rounded-lg p-8" data-aos="fade-up">
+                    <div class="flex justify-center">
+                        <div class="font-mono text-sm text-green-300 leading-loose space-y-2">
+                            <div class="flex flex-col items-center space-y-4">
+                                <div class="bg-green-900/30 border border-green-700 rounded px-6 py-3 text-center">
+                                    <i class="fas fa-play text-green-500 mr-2"></i>INICIO
+                                </div>
+                                <span class="text-green-600">↓</span>
+                                <div class="bg-gray-800 rounded px-6 py-3 text-center border border-gray-700">
+                                    try: Ejecutar código
+                                </div>
+                                <span class="text-green-600">↓</span>
+                                <div class="bg-gray-800 rounded px-6 py-3 text-center border border-yellow-700">
+                                    <i class="fas fa-exclamation-triangle text-yellow-500 mr-2"></i>¿Ocurre Error?
+                                </div>
+                                <div class="flex space-x-16">
+                                    <div class="flex flex-col items-center">
+                                        <span class="text-red-500">SÍ ↓</span>
+                                        <div class="bg-red-900/30 border border-red-700 rounded px-4 py-2 text-center">
+                                            except: Manejar error
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col items-center">
+                                        <span class="text-green-500">NO ↓</span>
+                                        <div class="bg-green-900/30 border border-green-700 rounded px-4 py-2 text-center">
+                                            else: Sin errores
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="text-green-600">↓</span>
+                                <div class="bg-blue-900/30 border border-blue-700 rounded px-6 py-3 text-center">
+                                    finally: Ejecutar SIEMPRE
+                                </div>
+                                <span class="text-green-600">↓</span>
+                                <div class="bg-green-900/30 border border-green-700 rounded px-6 py-3 text-center">
+                                    <i class="fas fa-stop text-green-500 mr-2"></i>FIN
+                                </div>
                             </div>
                         </div>
-                        <div class="w-full bg-gray-800 rounded-full h-2.5 overflow-hidden">
-                            <div class="h-full bg-gradient-to-r from-emerald-500 to-green-400 rounded-full transition-all duration-1000 ease-out" :style="{ width: animateBars ? skill.value + '%' : '0%' }"></div>
+                    </div>
+                    <p class="text-center text-green-600 text-sm mt-6">
+                        <!-- COMPLETAR: Descripción del diagrama o nota técnica -->
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Código Interactivo (Simulador) -->
+        <section id="codigo-interactivo" class="py-20 bg-gray-950">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center space-x-3 mb-10" data-aos="fade-right">
+                    <span class="text-green-600 text-2xl">####</span>
+                    <h2 class="text-3xl font-bold text-green-400">Simulador CLI en Vivo</h2>
+                </div>
+                <div class="bg-black border border-green-800/50 rounded-lg overflow-hidden shadow-2xl" data-aos="fade-up">
+                    <div class="bg-gray-900 px-4 py-2 flex items-center space-x-2 text-xs text-gray-500">
+                        <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                        <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+                        <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                        <span class="ml-2">terminal@alan-python:~$</span>
+                    </div>
+                    <div class="p-4 min-h-[400px] font-mono text-sm" style="background-color: #0a0a0a;">
+                        <div class="space-y-2 mb-4 max-h-60 overflow-y-auto" id="terminal-output">
+                            <div v-for="(line, index) in terminalLines" :key="index" :class="line.type === 'error' ? 'text-red-400' : line.type === 'success' ? 'text-green-400' : line.type === 'info' ? 'text-yellow-400' : 'text-green-300'">
+                                {{ line.text }}
+                            </div>
+                        </div>
+                        <div class="flex items-center text-green-400">
+                            <span class="mr-2">$</span>
+                            <input type="text" v-model="commandInput" @keyup.enter="executeSimulation" class="bg-transparent border-none outline-none flex-1 text-green-300 font-mono" placeholder="Escribe un comando (ej: dividir 10 0, leer archivo.txt, edad veinte)..." autofocus>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- Hobbies & Interests -->
-        <section id="hobbies" class="py-24 bg-gray-900/50">
-            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="text-4xl font-bold text-center mb-16 text-white" data-aos="fade-up">{{ getText('hobbies_heading') }}</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div v-for="hobby in hobbies" :key="hobby.key" class="bg-gray-900/80 border border-emerald-800/30 rounded-2xl p-6 text-center hover:border-emerald-500/50 transition-all duration-300 group" data-aos="fade-up" :data-aos-delay="hobby.delay">
-                        <div class="w-16 h-16 mx-auto bg-gradient-to-br from-emerald-700 to-green-600 rounded-2xl flex items-center justify-center text-2xl text-white mb-4 group-hover:scale-110 transition-transform duration-300"><i :class="hobby.icon"></i></div>
-                        <h3 class="text-lg font-semibold text-white mb-2">{{ getText(hobby.key + '_name') }}</h3>
-                        <p class="text-gray-400 text-sm">{{ getText(hobby.key + '_desc') }}</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Contact -->
-        <section id="contact" class="py-24 bg-gray-950">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h2 class="text-4xl font-bold mb-16 text-white" data-aos="fade-up">{{ getText('contact_heading') }}</h2>
-                <div class="bg-gray-900/80 border border-emerald-800/40 rounded-2xl p-10 shadow-2xl" data-aos="fade-up" data-aos-delay="200">
-                    <div class="inline-flex items-center space-x-4 bg-gray-950/50 rounded-full px-6 py-3 mb-6 border border-emerald-800/30">
-                        <i class="fas fa-envelope text-emerald-400 text-2xl"></i>
-                        <span class="text-xl text-gray-200 font-mono">alan.ruiz7225@gmail.com</span>
-                    </div>
-                    <div class="flex flex-wrap justify-center gap-4">
-                        <button @click="copyEmail" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 flex items-center shadow-lg hover:shadow-emerald-500/40">
-                            <i class="fas fa-copy mr-2"></i> {{ getText('contact_copy') }}
-                        </button>
-                        <a :href="pinterestUrl" target="_blank" rel="noopener noreferrer" class="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 flex items-center shadow-lg border border-emerald-800/40">
-                            <i class="fab fa-pinterest mr-2"></i> Pinterest
-                        </a>
-                    </div>
-                    <p v-if="copied" class="text-emerald-400 mt-4 animate-pulse">{{ getText('contact_copied') }}</p>
-                </div>
+                <p class="text-green-600 text-xs mt-2 text-center">
+                    <!-- COMPLETAR: Instrucciones para el simulador -->
+                </p>
             </div>
         </section>
 
         <!-- Footer -->
-        <footer class="border-t border-emerald-900/40 py-8 bg-gray-950">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500 text-sm">
-                <p>&copy; {{ currentYear }} Alan Ruiz. {{ getText('footer_text') }}</p>
+        <footer class="border-t border-green-900/30 py-8 bg-gray-950">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <p class="text-green-700 text-sm font-mono">
+                    <i class="fas fa-code-branch mr-1"></i>
+                    <!-- COMPLETAR: Footer con nombre/curso/fecha -->
+                </p>
             </div>
         </footer>
     </div>
@@ -156,109 +268,107 @@
             data() {
                 return {
                     menuOpen: false,
-                    lang: 'en',
-                    currentYear: new Date().getFullYear(),
-                    copied: false,
-                    animateBars: false,
-                    pinterestUrl: 'https://ar.pinterest.com/pin/1062497737090498104/',
+                    commandInput: '',
+                    terminalLines: [
+                        { text: '╔══════════════════════════════════════╗', type: 'normal' },
+                        { text: '║   SIMULADOR DE EXCEPCIONES v1.0     ║', type: 'info' },
+                        { text: '╚══════════════════════════════════════╝', type: 'normal' },
+                        { text: '', type: 'normal' },
+                        { text: 'Comandos disponibles:', type: 'info' },
+                        { text: '  dividir [num1] [num2]  → Prueba ZeroDivisionError', type: 'normal' },
+                        { text: '  leer [archivo]         → Prueba FileNotFoundError', type: 'normal' },
+                        { text: '  edad [valor]           → Prueba ValueError', type: 'normal' },
+                        { text: '  clear                  → Limpiar terminal', type: 'normal' },
+                        { text: '  help                   → Mostrar ayuda', type: 'normal' },
+                        { text: '', type: 'normal' },
+                        { text: 'Escribe un comando para simular errores...', type: 'info' },
+                    ],
                     navLinks: [
-                        { id: 'home', key: 'home' },
-                        { id: 'about', key: 'about' },
-                        { id: 'skills', key: 'skills' },
-                        { id: 'hobbies', key: 'hobbies' },
-                        { id: 'contact', key: 'contact' }
-                    ],
-                    translations: {
-                        home: { en: 'Home', es: 'Inicio' },
-                        about: { en: 'About', es: 'Sobre mí' },
-                        skills: { en: 'Skills', es: 'Habilidades' },
-                        hobbies: { en: 'Hobbies', es: 'Pasatiempos' },
-                        contact: { en: 'Contact', es: 'Contacto' },
-                        hero_title: { en: 'Python & Manga Enthusiast', es: 'Entusiasta de Python y el Manga' },
-                        hero_cta: { en: 'Get in touch', es: 'Contactar' },
-                        about_heading: { en: 'About Me', es: 'Sobre Mí' },
-                        about_content: {
-                            en: "I'm Alan, a self‑taught learner with a strong command of English and a growing foundation in Python and GitHub. I believe in discipline as the engine of progress: I go to the gym regularly and maintain a lifestyle built on good habits. In my free time, I dive into the captivating worlds of manga and manhwa, always searching for stories that inspire and challenge my perspective. I'm passionate about continuous improvement, whether in code, health, or mindset.",
-                            es: "Soy Alan, un aprendiz autodidacta con un sólido dominio del inglés y una base creciente en Python y GitHub. Creo en la disciplina como motor del progreso: voy al gimnasio con regularidad y mantengo un estilo de vida basado en buenos hábitos. En mi tiempo libre, me sumerjo en los cautivadores mundos del manga y el manhwa, siempre en busca de historias que inspiren y desafíen mi perspectiva. Me apasiona la mejora continua, ya sea en el código, la salud o la mentalidad."
-                        },
-                        skills_heading: { en: 'Skills & Strengths', es: 'Habilidades y Fortalezas' },
-                        python_name: { en: 'Python', es: 'Python' },
-                        python_level: { en: 'Basic', es: 'Básico' },
-                        github_name: { en: 'GitHub', es: 'GitHub' },
-                        github_level: { en: 'Basic', es: 'Básico' },
-                        gym_name: { en: 'Gym & Discipline', es: 'Gimnasio y Disciplina' },
-                        gym_level: { en: 'Advanced', es: 'Avanzado' },
-                        english_name: { en: 'English', es: 'Inglés' },
-                        english_level: { en: 'Advanced', es: 'Avanzado' },
-                        hobbies_heading: { en: 'Hobbies & Interests', es: 'Pasatiempos e Intereses' },
-                        gym_hobby_name: { en: 'Gym', es: 'Gimnasio' },
-                        gym_hobby_desc: { en: 'Weightlifting and functional training keep me focused and energized.', es: 'El levantamiento de pesas y el entrenamiento funcional me mantienen centrado y con energía.' },
-                        manga_name: { en: 'Manga & Manhwa', es: 'Manga y Manhwa' },
-                        manga_desc: { en: 'I love exploring complex narratives and unique art styles from Japan and Korea.', es: 'Me encanta explorar narrativas complejas y estilos de arte únicos de Japón y Corea.' },
-                        healthy_name: { en: 'Healthy Lifestyle', es: 'Estilo de vida saludable' },
-                        healthy_desc: { en: 'Mindful eating, quality sleep, and consistency are my non‑negotiables.', es: 'Alimentación consciente, sueño de calidad y constancia son mis prioridades innegociables.' },
-                        learning_name: { en: 'Continuous Learning', es: 'Aprendizaje continuo' },
-                        learning_desc: { en: 'Always picking up new tech skills or diving into personal development.', es: 'Siempre adquiriendo nuevas habilidades tecnológicas o profundizando en desarrollo personal.' },
-                        contact_heading: { en: 'Get In Touch', es: 'Contacto' },
-                        contact_copy: { en: 'Copy Email', es: 'Copiar Email' },
-                        contact_copied: { en: 'Copied!', es: '¡Copiado!' },
-                        footer_text: { en: 'All rights reserved.', es: 'Todos los derechos reservados.' }
-                    },
-                    skills: [
-                        { key: 'python', icon: 'fas fa-code', value: 40, delay: 0 },
-                        { key: 'github', icon: 'fab fa-github', value: 50, delay: 100 },
-                        { key: 'gym', icon: 'fas fa-dumbbell', value: 80, delay: 200 },
-                        { key: 'english', icon: 'fas fa-language', value: 90, delay: 300 }
-                    ],
-                    hobbies: [
-                        { key: 'gym_hobby', icon: 'fas fa-dumbbell', delay: 0 },
-                        { key: 'manga', icon: 'fas fa-book-open', delay: 100 },
-                        { key: 'healthy', icon: 'fas fa-heart-pulse', delay: 200 },
-                        { key: 'learning', icon: 'fas fa-laptop-code', delay: 300 }
+                        { id: 'inicio', label: 'Inicio', icon: 'fas fa-home' },
+                        { id: 'definicion', label: 'Definición', icon: 'fas fa-book' },
+                        { id: 'antes-despues', label: 'Antes/Después', icon: 'fas fa-code-compare' },
+                        { id: 'diagrama', label: 'Diagrama', icon: 'fas fa-diagram-project' },
+                        { id: 'codigo-interactivo', label: 'Live Code', icon: 'fas fa-terminal' },
                     ]
                 }
             },
             mounted() {
                 AOS.init({ once: true, duration: 800 });
-                window.addEventListener('scroll', this.handleScroll);
-                this.handleScroll();
-            },
-            beforeUnmount() {
-                window.removeEventListener('scroll', this.handleScroll);
             },
             methods: {
-                getText(key) {
-                    if (this.translations[key]) {
-                        return this.translations[key][this.lang];
-                    }
-                    return key;
-                },
-                toggleLang() {
-                    this.lang = this.lang === 'en' ? 'es' : 'en';
-                },
                 scrollToSection(id) {
                     const section = document.getElementById(id);
                     if (section) {
                         section.scrollIntoView({ behavior: 'smooth' });
                     }
                 },
-                copyEmail() {
-                    navigator.clipboard.writeText('alan.ruiz7225@gmail.com').then(() => {
-                        this.copied = true;
-                        setTimeout(() => { this.copied = false; }, 2000);
-                    }).catch(err => {
-                        console.error('Failed to copy: ', err);
-                    });
-                },
-                handleScroll() {
-                    if (this.animateBars) return;
-                    const skillsSection = document.getElementById('skills');
-                    if (!skillsSection) return;
-                    const rect = skillsSection.getBoundingClientRect();
-                    const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-                    if (rect.top < windowHeight - 100 && rect.bottom > 0) {
-                        this.animateBars = true;
+                executeSimulation() {
+                    const cmd = this.commandInput.trim();
+                    if (!cmd) return;
+                    
+                    this.terminalLines.push({ text: `$ ${cmd}`, type: 'info' });
+                    
+                    const parts = cmd.split(' ');
+                    const action = parts[0].toLowerCase();
+                    
+                    // Simular try/except/finally
+                    this.terminalLines.push({ text: '--- try: ejecutando... ---', type: 'normal' });
+                    
+                    try {
+                        if (action === 'clear') {
+                            this.terminalLines = [];
+                            this.commandInput = '';
+                            return;
+                        } else if (action === 'help') {
+                            this.terminalLines.push({ text: 'Comandos: dividir, leer, edad, clear, help', type: 'success' });
+                        } else if (action === 'edad') {
+                            if (!parts[1] || isNaN(parts[1])) {
+                                throw { type: 'ValueError', message: `invalid literal for int() with base 10: '${parts[1] || 'ninguno'}'` };
+                            }
+                            this.terminalLines.push({ text: `✅ Edad válida: ${parts[1]} años`, type: 'success' });
+                        } else if (action === 'dividir') {
+                            const num1 = parseFloat(parts[1]);
+                            const num2 = parseFloat(parts[2]);
+                            if (isNaN(num1) || isNaN(num2)) {
+                                throw { type: 'ValueError', message: 'Ambos argumentos deben ser números' };
+                            }
+                            if (num2 === 0) {
+                                throw { type: 'ZeroDivisionError', message: 'division by zero' };
+                            }
+                            this.terminalLines.push({ text: `✅ Resultado: ${num1} / ${num2} = ${num1 / num2}`, type: 'success' });
+                        } else if (action === 'leer') {
+                            if (!parts[1]) {
+                                throw { type: 'FileNotFoundError', message: 'Archivo no especificado' };
+                            }
+                            throw { type: 'FileNotFoundError', message: `[Errno 2] No such file or directory: '${parts[1]}'` };
+                        } else {
+                            throw { type: 'Exception', message: `Comando no reconocido: '${action}'` };
+                        }
+                    } catch (error) {
+                        this.terminalLines.push({ text: `❌ ${error.type}: ${error.message}`, type: 'error' });
+                        if (error.type === 'ValueError') {
+                            this.terminalLines.push({ text: '   ↳ Solución: Ingresa un valor numérico válido.', type: 'error' });
+                        } else if (error.type === 'ZeroDivisionError') {
+                            this.terminalLines.push({ text: '   ↳ Solución: El divisor no puede ser cero.', type: 'error' });
+                        } else if (error.type === 'FileNotFoundError') {
+                            this.terminalLines.push({ text: '   ↳ Solución: Verifica que el archivo exista.', type: 'error' });
+                        } else {
+                            this.terminalLines.push({ text: '   ↳ Usa "help" para ver comandos disponibles.', type: 'error' });
+                        }
+                    } finally {
+                        this.terminalLines.push({ text: '--- finally: limpieza completada. ---', type: 'info' });
+                        this.terminalLines.push({ text: '', type: 'normal' });
                     }
+                    
+                    this.commandInput = '';
+                    
+                    // Auto-scroll
+                    this.$nextTick(() => {
+                        const output = document.getElementById('terminal-output');
+                        if (output) {
+                            output.scrollTop = output.scrollHeight;
+                        }
+                    });
                 }
             }
         }).mount('#app');
